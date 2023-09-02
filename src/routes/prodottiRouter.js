@@ -26,11 +26,13 @@ import {
   getProdottoById,
   insertProdotti,
   updateProdotti,
-  deleteProdotti
+  deleteProdotti,
+  getProdottiFilter
 } from '../controllers/prodottiController.js';
 
 const router = express.Router();
 
+router.get('/prodotti-filter', getProdottiFilter);
 // Get all products
 router.get('/', getProdotti);
 

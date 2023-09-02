@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { returnUtente } from "../controllers/utentiController.js";
+import Account from '../models/Account.js';
 
 const checkAuth = async (req, res, next) => {
   let token;
@@ -12,12 +12,22 @@ const checkAuth = async (req, res, next) => {
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.utente = await returnUtente(decoded.id);
-      console.log(req.utente)
+      //req.utente = await returnUtente(decoded.id);
+      req.account = await Account.findOne({
+        where: {
+          id_account: decoded.id
+        },
+        attributes: { exclude: ['password'] }
+      })
+
+      req.account = req.account.dataValues;
+
+      console.log(req.account)
 
       return next();
     } catch (error) {
-      return res.status(404).json({ msg: "Hubo un error" });
+      console.log(error);
+      return res.status(404).json({ msg: "Ops!!! Error!" });
     }
   }
 

@@ -1,18 +1,13 @@
 import Account from '../models/Account.js';
 
-
 export const getAccountFilter = async (req, res) => {
-
 }
-
 
 export const updatePassword = async (req, res) => {
-
 }
 
-
 // Funzione per creare un nuovo account
-export const createAccount = async (req, res) => {
+export const insertAccount = async (req, res) => {
   try {
     const { account, email, password, tipo_account, ultimo_login, uuid_account } = req.body;
 
@@ -29,7 +24,7 @@ export const createAccount = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-};
+}
 
 // Funzione per ottenere tutti gli account
 export const getAccounts = async (req, res) => {
@@ -40,7 +35,7 @@ export const getAccounts = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-};
+}
 
 // Funzione per ottenere un singolo account
 export const getAccount = async (req, res) => {
@@ -57,7 +52,7 @@ export const getAccount = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-};
+}
 
 // Funzione per aggiornare un account
 export const updateAccount = async (req, res) => {
@@ -84,7 +79,7 @@ export const updateAccount = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-};
+}
 
 // Funzione per eliminare un account
 export const deleteAccount = async (req, res) => {
@@ -103,4 +98,4 @@ export const deleteAccount = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-};
+}

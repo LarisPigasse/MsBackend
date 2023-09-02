@@ -1,4 +1,4 @@
-import Articolo from '../models/Articolo.js';
+import Articolo from '../models/Articoli.js';
 import getUUID from '../helpers/generaUUID.js'
 
 // Get all articles

@@ -13,7 +13,6 @@ import categorieRouter from "./routes/categorieRouter.js";
 import sottocategorieRouter from "./routes/sottocategorieRouter.js";
 import articoliRouter from "./routes/articoliRouter.js";
 
-
 const app = express();
 
 // Middlewares
@@ -51,7 +50,7 @@ app.use("/api/sottocategorie",sottocategorieRouter);
 app.use("/api/articoli",articoliRouter);
 
 app.use((req, res, next) => {
-  res.status(404).json({ message: "N0t found" });
+  res.status(404).json({ message: "Noot found" });
 });
 
 const port = process.env.PORT || 4020;

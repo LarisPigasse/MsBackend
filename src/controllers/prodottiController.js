@@ -1,6 +1,53 @@
 import Prodotto from '../models/Prodotti.js';
 import getUUID from '../helpers/generaUUID.js'
 
+export const getProdottiFilter = async (req, res) => {
+  try {
+    const { pageIndex, pageSize, sort, query } = req.query;
+
+    let ordinamento = {
+      order: '',
+      key: ''
+    }
+
+    if (sort) {
+      ordinamento = JSON.parse(sort);
+    }
+
+    let where = {};
+
+    if (query) {
+      where[Op.or] = [
+        { prodotto: { [Op.like]: `%${query}%` } },
+        { descrizione: { [Op.like]: `%${query}%` } }
+      ];
+    }
+
+    const limit = parseInt(pageSize);
+    const offset = (parseInt(pageIndex) - 1) * limit;
+
+    let order = [];
+    if (ordinamento.order != '' && ordinamento.key != '') {
+      order.push([ordinamento.key, ordinamento.order]);
+    }
+
+    const result = await Prodotto.findAndCountAll({
+      where,
+      order,
+      limit,
+      offset
+    });
+
+    res.json({
+      total: result.count,
+      data: result.rows
+    });
+
+  } catch (error) {
+    res.status(500).json({ error_msg: 'Error getProdottiFilter', error });
+  }
+}
+
 // Get all products
 export const getProdotti = async (req, res) => {
   try {
