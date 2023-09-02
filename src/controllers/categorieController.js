@@ -1,6 +1,54 @@
 import Categoria from '../models/Categorie.js';
 import getUUID from '../helpers/generaUUID.js'
 
+export const getCategorieFilter = async (req, res) => {
+
+  try {
+    const { pageIndex, pageSize, sort, query } = req.query;
+
+    let ordinamento = {
+      order: '',
+      key: ''
+    }
+
+    if (sort) {
+      ordinamento = JSON.parse(sort);
+    }
+
+    let where = {};
+
+    if (query) {
+      where[Op.or] = [
+        { sottocategoria: { [Op.like]: `%${query}%` } },
+        { descrizione: { [Op.like]: `%${query}%` } }
+      ];
+    }
+
+    const limit = parseInt(pageSize);
+    const offset = (parseInt(pageIndex) - 1) * limit;
+
+    let order = [];
+    if (ordinamento.order != '' && ordinamento.key != '') {
+      order.push([ordinamento.key, ordinamento.order]);
+    }
+
+    const result = await Categorie.findAndCountAll({
+      where,
+      order,
+      limit,
+      offset
+    });
+
+    res.json({
+      total: result.count,
+      data: result.rows
+    });
+
+  } catch (error) {
+    res.status(500).json({ error_msg: 'Error getCategorieFilter', error });
+  }
+}
+
 // Get all categories
 export const getCategorie = async (req, res) => {
   try {

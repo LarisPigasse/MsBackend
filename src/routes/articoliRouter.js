@@ -4,12 +4,15 @@ import {
   getArticoloById,
   insertArticoli,
   updateArticoli,
-  deleteArticoli
+  deleteArticoli,
+  getArticoliFilter
 } from '../controllers/articoliController.js';
 
 const router = express.Router();
 
 // Route per ottenere tutti gli articoli
+router.get('/articoli-filter', getArticoli);
+
 router.get('/', getArticoli);
 
 // Route per ottenere un articolo per ID

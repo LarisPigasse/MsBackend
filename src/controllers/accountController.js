@@ -1,6 +1,51 @@
 import Account from '../models/Account.js';
 
 export const getAccountFilter = async (req, res) => {
+
+  try {
+    const { pageIndex, pageSize, sort, query } = req.query;
+
+    let ordinamento = {
+      order: '',
+      key: ''
+    }
+
+    if (sort) {
+      ordinamento = JSON.parse(sort);
+    }
+
+    let where = {};
+
+    if (query) {
+      where[Op.or] = [
+        { account: { [Op.like]: `%${query}%` } },
+        { email: { [Op.like]: `%${query}%` } }
+      ];
+    }
+
+    const limit = parseInt(pageSize);
+    const offset = (parseInt(pageIndex) - 1) * limit;
+
+    let order = [];
+    if (ordinamento.order != '' && ordinamento.key != '') {
+      order.push([ordinamento.key, ordinamento.order]);
+    }
+
+    const result = await Account.findAndCountAll({
+      where,
+      order,
+      limit,
+      offset
+    });
+
+    res.json({
+      total: result.count,
+      data: result.rows
+    });
+
+  } catch (error) {
+    res.status(500).json({ error_msg: 'Error getAccountFilter', error });
+  }
 }
 
 export const updatePassword = async (req, res) => {

@@ -4,12 +4,15 @@ import {
   getAccountById,
   insertAccount,
   updateAccount,
-  deleteAccount
+  deleteAccount,
+  getAccountFilter
 } from '../controllers/accountController.js';
 
 const router = express.Router();
 
 // Route per ottenere tutti gli account
+router.get('/account-filter', getAccountFilter);
+
 router.get('/', getAccount);
 
 // Route per ottenere un account per ID

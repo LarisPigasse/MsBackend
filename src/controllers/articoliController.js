@@ -1,6 +1,57 @@
 import Articolo from '../models/Articoli.js';
 import getUUID from '../helpers/generaUUID.js'
 
+
+export const getArticoliFilter = async (req, res) => {
+
+  try {
+    const { pageIndex, pageSize, sort, query } = req.query;
+
+    let ordinamento = {
+      order: '',
+      key: ''
+    }
+
+    if (sort) {
+      ordinamento = JSON.parse(sort);
+    }
+
+    let where = {};
+
+    if (query) {
+      where[Op.or] = [
+        { uuid_articolo: { [Op.like]: `%${query}%` } },
+        { note: { [Op.like]: `%${query}%` } },
+        { stato: { [Op.like]: `%${query}%` } },
+        { costo: { [Op.like]: `%${query}%` } }
+      ];
+    }
+
+    const limit = parseInt(pageSize);
+    const offset = (parseInt(pageIndex) - 1) * limit;
+
+    let order = [];
+    if (ordinamento.order != '' && ordinamento.key != '') {
+      order.push([ordinamento.key, ordinamento.order]);
+    }
+
+    const result = await Articolo.findAndCountAll({
+      where,
+      order,
+      limit,
+      offset
+    });
+
+    res.json({
+      total: result.count,
+      data: result.rows
+    });
+
+  } catch (error) {
+    res.status(500).json({ error_msg: 'Error getArticoliFilter', error });
+  }
+}
+
 // Get all articles
 export const getArticoli = async (req, res) => {
   try {

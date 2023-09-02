@@ -4,12 +4,15 @@ import {
     getCategoria,
     createCategoria,
     updateCategoria,
-    deleteCategoria
+    deleteCategoria,
+    getCategorieFilter
 } from "../controllers/categorieController.js";
 
 const router = Router();
 
 // Get all categories
+router.get('/categorie-filter', getCategorieFilter);
+
 router.get('/', getCategorie);
 
 // Get a category by ID
