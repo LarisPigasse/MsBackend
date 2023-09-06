@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 // Route per ottenere tutti gli articoli
-router.get('/articoli-filter', getArticoli);
+router.post('/articoli-filter', getArticoliFilter);
 
 router.get('/', getArticoli);
 

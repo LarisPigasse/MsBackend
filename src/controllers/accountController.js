@@ -11,7 +11,7 @@ export const getAccountFilter = async (req, res) => {
     }
 
     if (sort) {
-      ordinamento = JSON.parse(sort);
+      ordinamento = sort;
     }
 
     let where = {};

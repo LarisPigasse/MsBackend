@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 // Route per ottenere tutti gli account
-router.get('/account-filter', getAccountFilter);
+router.post('/account-filter', getAccountFilter);
 
 router.get('/', getAccount);
 

@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get('/sottocategorie-filter', getSottocategorieFilter);
+router.post('/sottocategorie-filter', getSottocategorieFilter);
 
 router.get('/', getProdottiSottocategorie);
 router.get('/:id_categoria/:id_sottocategoria', getProdottiSottocategoria);

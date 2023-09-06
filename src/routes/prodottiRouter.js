@@ -32,7 +32,7 @@ import {
 
 const router = express.Router();
 
-router.get('/prodotti-filter', getProdottiFilter);
+router.post('/prodotti-filter', getProdottiFilter);
 // Get all products
 router.get('/', getProdotti);
 

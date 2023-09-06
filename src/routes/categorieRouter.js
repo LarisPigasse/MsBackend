@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 // Get all categories
-router.get('/categorie-filter', getCategorieFilter);
+router.post('/categorie-filter', getCategorieFilter);
 
 router.get('/', getCategorie);
 
