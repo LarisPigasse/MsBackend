@@ -3,7 +3,7 @@ import Account from '../models/Account.js';
 export const getAccountFilter = async (req, res) => {
 
   try {
-    const { pageIndex, pageSize, sort, query } = req.query;
+    const { pageIndex, pageSize, sort, query } = req.body;
 
     let ordinamento = {
       order: '',

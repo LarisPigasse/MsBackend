@@ -4,7 +4,7 @@ import Sottocategorie from '../models/Sottocategorie.js';
 export const getSottocategorieFilter = async (req, res) => {
 
   try {
-    const { pageIndex, pageSize, sort, query } = req.query;
+    const { pageIndex, pageSize, sort, query } = req.body;
 
     let ordinamento = {
       order: '',

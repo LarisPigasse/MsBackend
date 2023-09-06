@@ -5,7 +5,7 @@ import getUUID from '../helpers/generaUUID.js'
 export const getArticoliFilter = async (req, res) => {
 
   try {
-    const { pageIndex, pageSize, sort, query } = req.query;
+    const { pageIndex, pageSize, sort, query } = req.body;
 
     let ordinamento = {
       order: '',
