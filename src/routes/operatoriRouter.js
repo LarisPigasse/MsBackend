@@ -2,7 +2,7 @@ import express from 'express';
 import {
   getOperatori,
   getOperatoreById,
-  createOperatore,
+  insertOperatore,
   updateOperatore,
   deleteOperatore,
   getOperatoriFilter
@@ -19,7 +19,7 @@ router.get('/operatori', getOperatori);
 router.get('/operatori/:id', getOperatoreById);
 
 // Route per creare un nuovo operatore
-router.post('/operatori', createOperatore);
+router.post('/operatori', insertOperatore);
 
 // Route per aggiornare un operatore per ID
 router.put('/operatori/:id', updateOperatore);

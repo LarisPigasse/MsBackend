@@ -1,4 +1,4 @@
-import Operatore from '../models/Operatore.js';
+import Operatore from '../models/Operatori.js';
 import getUUID from '../helpers/generaUUID.js'
 
 export const getOperatoriFilter = async (req, res) => {

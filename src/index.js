@@ -12,6 +12,7 @@ import fornitoriRouter from "./routes/fornitoriRouter.js";
 import categorieRouter from "./routes/categorieRouter.js";
 import sottocategorieRouter from "./routes/sottocategorieRouter.js";
 import articoliRouter from "./routes/articoliRouter.js";
+import operatoriRouter from "./routes/operatoriRouter.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/fornitori",fornitoriRouter);
 app.use("/api/categorie",categorieRouter);
 app.use("/api/sottocategorie",sottocategorieRouter);
 app.use("/api/articoli",articoliRouter);
+app.use("/api/operatori",operatoriRouter);
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Noot found" });
