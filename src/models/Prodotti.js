@@ -5,7 +5,8 @@ const Prodotto = sequelize.define('prodotti', {
   id_prodotto: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   uuid_prodotto: {
     type: DataTypes.STRING(64),

@@ -61,8 +61,8 @@ export const getProdotti = async (req, res) => {
 // Get a product by ID
 export const getProdottoById = async (req, res) => {
   try {
-    const id_prodotto = req.params.id;
-    const prodotto = await Prodotto.findByPk(id_prodotto);
+    const uuid_prodotto = req.params.uuid_prodotto;
+    const prodotto = await Prodotto.findOne({ where: { uuid_prodotto } });
     if (prodotto) {
       res.json(prodotto);
     } else {
@@ -88,7 +88,7 @@ export const insertProdotti = async (req, res) => {
       codice,
       sku,
       id_categoria,
-      id_subcategoria,
+      id_sottocategoria,
       id_produttore,
       id_aliquota,
       stato
@@ -109,7 +109,7 @@ export const insertProdotti = async (req, res) => {
       codice,
       sku,
       id_categoria,
-      id_subcategoria,
+      id_sottocategoria,
       id_produttore,
       id_aliquota,
       stato
@@ -118,7 +118,7 @@ export const insertProdotti = async (req, res) => {
     //res.status(201).json(nuovoProdotto);
     res.json({ ok:true, message:"Prodotto inserito correttamente", prodotto:nuovoProdotto});
   } catch (error) {
-    res.status(500).json({ error: 'Errore durante la creazione del prodotto' });
+    res.status(500).json({ error: 'Errore durante la creazione del prodotto', error });
   }
 }
 
@@ -138,7 +138,7 @@ export const updateProdotti = async (req, res) => {
       codice,
       sku,
       id_categoria,
-      id_subcategoria,
+      id_sottocategoria,
       id_produttore,
       id_aliquota,
       stato
@@ -157,7 +157,7 @@ export const updateProdotti = async (req, res) => {
         codice,
         sku,
         id_categoria,
-        id_subcategoria,
+        id_sottocategoria,
         id_produttore,
         id_aliquota,
         stato

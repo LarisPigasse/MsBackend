@@ -73,10 +73,10 @@ export const getCategoria = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Errore durante il recupero della categoria' });
   }
-};
+}
 
 // Create a new category
-export const createCategoria = async (req, res) => {
+export const insertCategoria = async (req, res) => {
   try {
     const {  categoria, descrizione, stato } = req.body;
     let uuid_categoria = getUUID();
@@ -87,14 +87,12 @@ export const createCategoria = async (req, res) => {
       uuid_categoria,
       stato
     });
-
-    res.status(201).json(nuovaCategoria);
+    res.json({ ok: true, message: 'Categoria inserita correttamente', categoria: nuovaCategoria });
   } catch (error) {
     console.log(error);
-    
     res.status(500).json({ error: 'Errore durante la creazione della categoria' });
   }
-};
+}
 
 // Update a category
 export const updateCategoria = async (req, res) => {
@@ -120,7 +118,7 @@ export const updateCategoria = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Errore durante l\'aggiornamento della categoria' });
   }
-};
+}
 
 // Delete a category
 export const deleteCategoria = async (req, res) => {
@@ -137,4 +135,4 @@ export const deleteCategoria = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Errore durante l\'eliminazione della categoria' });
   }
-};
+}

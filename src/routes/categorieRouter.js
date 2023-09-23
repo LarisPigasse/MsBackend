@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
     getCategorie,
     getCategoria,
-    createCategoria,
+    insertCategoria,
     updateCategoria,
     deleteCategoria,
     getCategorieFilter
@@ -19,7 +19,7 @@ router.get('/', getCategorie);
 router.get('/:uuid_categoria', getCategoria);
 
 // Create a new category
-router.post('/', createCategoria);
+router.post('/', insertCategoria);
 
 // Update a category
 router.put('/:uuid_categoria', updateCategoria);

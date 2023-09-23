@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-    createProdottiSottocategorie,
-    getProdottiSottocategorie,
-    getProdottiSottocategoria,
-    updateProdottiSottocategoria,
-    deleteProdottiSottocategoria,
+    insertSottocategoria,
+    getSottocategorie,
+    getSottocategoria,
+    updateSottocategoria,
+    deleteSottocategoria,
     getSottocategorieFilter
 } from "../controllers/sottocategorieController.js";
 
@@ -12,14 +12,14 @@ const router = Router();
 
 router.post('/sottocategorie-filter', getSottocategorieFilter);
 
-router.get('/', getProdottiSottocategorie);
-router.get('/:id_categoria/:id_sottocategoria', getProdottiSottocategoria);
+router.get('/', getSottocategorie);
+router.get('/:id_categoria/:id_sottocategoria', getSottocategoria);
 
-router.post('/', createProdottiSottocategorie);
+router.post('/', insertSottocategoria);
 
-router.put('/:id_categoria/:id_sottocategoria', updateProdottiSottocategoria);
+router.put('/:id_categoria/:id_sottocategoria', updateSottocategoria);
 
-router.delete('/:id_categoria/:id_sottocategoria', deleteProdottiSottocategoria);
+router.delete('/:id_categoria/:id_sottocategoria', deleteSottocategoria);
 
 
 export default router;
