@@ -6,8 +6,14 @@ const Articolo = sequelize.define('articoli', {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   },
   uuid_articolo: {
+    type: DataTypes.STRING(64),
+    allowNull: false,
+    defaultValue: '',
+  },
+  articolo: {
     type: DataTypes.STRING(64),
     allowNull: false,
     defaultValue: '',
@@ -19,26 +25,32 @@ const Articolo = sequelize.define('articoli', {
   id_variante: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   },
   id_attributo: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   },
   prezzo_listino: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
+    defaultValue: 0,
   },
   prezzo_offerta: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
+    defaultValue: 0,
   },
   prezzo_minimo: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
+    defaultValue: 0,
   },
   costo: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
+    defaultValue: 0,
   },
   note: {
     type: DataTypes.TEXT,

@@ -1,4 +1,5 @@
 import Prodotto from '../models/Prodotti.js';
+import Articolo from '../models/Articoli.js';
 import getUUID from '../helpers/generaUUID.js'
 
 export const getProdottiFilter = async (req, res) => {
@@ -64,12 +65,27 @@ export const getProdottoById = async (req, res) => {
     const uuid_prodotto = req.params.uuid_prodotto;
     const prodotto = await Prodotto.findOne({ where: { uuid_prodotto } });
     if (prodotto) {
-      res.json(prodotto);
+      let id_prodotto =prodotto.id_prodotto
+
+      const articolo = await Articolo.findOne({ where: { id_prodotto } });
+
+      const valueArticolo = articolo.dataValues;
+
+      let response = {
+        ...prodotto.dataValues,
+        prezzo_listino:valueArticolo.prezzo_listino,
+        prezzo_offerta:valueArticolo.prezzo_offerta,
+        prezzo_minimo:valueArticolo.prezzo_minimo,
+        note:valueArticolo.note
+      }
+
+      res.json(response);
+
     } else {
       res.status(404).json({ error: 'Prodotto non trovato' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Errore durante il recupero del prodotto' });
+    res.status(500).json({ error: 'Errore durante il recupero del prodotto', 'e': error });
   }
 }
 
@@ -80,10 +96,6 @@ export const insertProdotti = async (req, res) => {
       prodotto,
       descrizione,
       scheda,
-      prezzo_listino,
-      prezzo_offerta,
-      prezzo_minimo,
-      costo,
       tags,
       codice,
       sku,
@@ -101,10 +113,6 @@ export const insertProdotti = async (req, res) => {
       prodotto,
       descrizione,
       scheda,
-      prezzo_listino,
-      prezzo_offerta,
-      prezzo_minimo,
-      costo,
       tags,
       codice,
       sku,
@@ -114,6 +122,30 @@ export const insertProdotti = async (req, res) => {
       id_aliquota,
       stato
     });
+
+    if(nuovoProdotto){
+      let uuid_articolo = getUUID();
+      let id_prodotto = nuovoProdotto.id_prodotto;
+      let articolo = prodotto;
+      const {
+        prezzo_listino,
+        prezzo_offerta,
+        prezzo_minimo,
+        note
+      } = req.body;
+  
+      await Articolo.create({
+        uuid_articolo,
+        id_prodotto,
+        id_variante: 0,
+        id_attributo: 0,
+        articolo,
+        prezzo_listino,
+        prezzo_offerta,
+        prezzo_minimo,
+        note
+      });
+    }
 
     //res.status(201).json(nuovoProdotto);
     res.json({ ok:true, message:"Prodotto inserito correttamente", prodotto:nuovoProdotto});
@@ -130,10 +162,6 @@ export const updateProdotti = async (req, res) => {
       prodotto,
       descrizione,
       scheda,
-      prezzo_listino,
-      prezzo_offerta,
-      prezzo_minimo,
-      costo,
       tags,
       codice,
       sku,
@@ -141,18 +169,15 @@ export const updateProdotti = async (req, res) => {
       id_sottocategoria,
       id_produttore,
       id_aliquota,
-      stato
+      stato,
+      id_prodotto
     } = req.body;
 
-    const [updatedRows] = await Prodotto.update(
+    const prodottoUpdate = await Prodotto.update(
       {
         prodotto,
         descrizione,
         scheda,
-        prezzo_listino,
-        prezzo_offerta,
-        prezzo_minimo,
-        costo,
         tags,
         codice,
         sku,
@@ -164,15 +189,46 @@ export const updateProdotti = async (req, res) => {
       },
       { where: { uuid_prodotto } }
     );
+    
+    const {
+      prezzo_listino,
+      prezzo_offerta,
+      prezzo_minimo,
+      note
+    } = req.body;
 
-    if (updatedRows === 0) {
+    const articoloUpdate = await Articolo.update(
+      {
+        articolo : prodotto,
+        prezzo_listino,
+        prezzo_offerta,
+        prezzo_minimo,
+        note
+      },
+      { where: { id_prodotto } }
+    );
+
+    if (prodottoUpdate.updatedRows === 0 && articoloUpdate.updatedRows === 0) {
       return res.status(404).json({ error: 'Prodotto non trovato' });
     }
 
     const prodottoAggiornato = Prodotto.findOne({ where: { uuid_prodotto } })
-    res.json(prodottoAggiornato);
-  } catch (error) {
-    res.status(500).json({ error: 'Errore durante l\'aggiornamento del prodotto' });
+
+    const articolo = await Articolo.findOne({ where: { id_prodotto } });
+
+    const valueArticolo = articolo.dataValues;
+
+    let response = {
+      ...prodottoAggiornato.dataValues,
+      prezzo_listino:valueArticolo.prezzo_listino,
+      prezzo_offerta:valueArticolo.prezzo_offerta,
+      prezzo_minimo:valueArticolo.prezzo_minimo,
+      note:valueArticolo.note
+    }
+
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ error: 'Errore durante l\'aggiornamento del prodotto', err });
   }
 }
 
