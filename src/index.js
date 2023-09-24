@@ -14,6 +14,11 @@ import sottocategorieRouter from "./routes/sottocategorieRouter.js";
 import articoliRouter from "./routes/articoliRouter.js";
 import operatoriRouter from "./routes/operatoriRouter.js";
 
+import aliquoteRouter from "./routes/aliquoteRouter.js";
+import variantiRouter from "./routes/variantiRouter.js";
+import attributiRouter from "./routes/attributiRouter.js";
+import produttoriRouter from "./routes/produttoriRouter.js";
+
 const app = express();
 
 // Middlewares
@@ -50,6 +55,11 @@ app.use("/api/categorie",categorieRouter);
 app.use("/api/sottocategorie",sottocategorieRouter);
 app.use("/api/articoli",articoliRouter);
 app.use("/api/operatori",operatoriRouter);
+
+app.use("/api/aliquote",aliquoteRouter);
+app.use("/api/varianti",variantiRouter);
+app.use("/api/attributi",attributiRouter);
+app.use("/api/produttori",produttoriRouter);
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Noot found" });

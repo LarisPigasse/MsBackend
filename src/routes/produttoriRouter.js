@@ -5,13 +5,13 @@ import {
   insertProduttore,
   updateProduttore,
   deleteProduttore,
-} from '../controllers/ProduttoreController.js';
+} from '../controllers/produttoriController.js';
 
 import checkAuth from "../middleware/checkAuth.js";
 
-router.use(checkAuth);
-
 const router = Router();
+
+router.use(checkAuth);
 
 router.get('/:id_produttore', getProduttore);
 

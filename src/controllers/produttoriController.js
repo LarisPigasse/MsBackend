@@ -1,4 +1,4 @@
-import Produttore from '../models/Produttore.js';
+import Produttore from '../models/Produttori.js';
 
 export const getProduttore = async (req, res) => {
   const { id_produttore } = req.params;

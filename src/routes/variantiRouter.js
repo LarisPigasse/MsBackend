@@ -9,9 +9,8 @@ import {
 
 import checkAuth from "../middleware/checkAuth.js";
 
-router.use(checkAuth);
-
 const router = express.Router();
+router.use(checkAuth);
 
 router.get('/:id_variante', getVariante);
 

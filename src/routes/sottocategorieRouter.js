@@ -5,7 +5,8 @@ import {
     getSottocategoria,
     updateSottocategoria,
     deleteSottocategoria,
-    getSottocategorieFilter
+    getSottocategorieFilter,
+    getSottocategorieByCategoria
 } from "../controllers/sottocategorieController.js";
 
 const router = Router();
@@ -13,6 +14,7 @@ const router = Router();
 router.post('/sottocategorie-filter', getSottocategorieFilter);
 
 router.get('/', getSottocategorie);
+router.get('/:id_categoria', getSottocategorieByCategoria);
 router.get('/:id_categoria/:id_sottocategoria', getSottocategoria);
 
 router.post('/', insertSottocategoria);

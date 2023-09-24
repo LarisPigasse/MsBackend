@@ -66,6 +66,21 @@ export const getSottocategorie = async (req, res) => {
   }
 }
 
+export const getSottocategorieByCategoria = async (req, res) => {
+  try {
+    const { id_categoria } = req.params;
+    const sottocategorie = await Sottocategorie.findAll({
+      where: { id_categoria }
+    });
+    if (!sottocategorie) {
+      return res.status(404).json({ message: 'Sottocategoria non trovata' });
+    }
+    res.status(200).json(sottocategorie);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
 export const getSottocategoria = async (req, res) => {
   try {
     const { id_categoria, id_sottocategoria } = req.params;
