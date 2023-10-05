@@ -1,4 +1,5 @@
 import Sottocategorie from '../models/Sottocategorie.js';
+import getUUID from '../helpers/generaUUID.js';
 
 export const getSottocategorieFilter = async (req, res) => {
 
@@ -50,7 +51,22 @@ export const getSottocategorieFilter = async (req, res) => {
 
 export const insertSottocategoria = async (req, res) => {
   try {
-    const prodottoSottocategoria = await Sottocategorie.create(req.body);
+    const { sottocategoria, descrizione, stato,id_categoria } = req.body;
+
+    let uuid_sottocategoria = getUUID();
+
+
+    let id_sottocategoria = await Sottocategorie.max('id_sottocategoria', { where: { id_categoria } });
+    id_sottocategoria = await id_sottocategoria + 1;
+
+    const prodottoSottocategoria = await Sottocategorie.create({
+      sottocategoria,
+      descrizione,
+      uuid_sottocategoria,
+      stato,
+      id_categoria,
+      id_sottocategoria
+    });
     res.json({ ok: true, message: 'Sottocategoria inserita correttamente', sottocategoria: prodottoSottocategoria });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -99,7 +115,14 @@ export const getSottocategoria = async (req, res) => {
 export const updateSottocategoria = async (req, res) => {
   try {
     const { id_categoria, id_sottocategoria } = req.params;
-    const [updated] = await Sottocategorie.update(req.body, {
+
+    const { sottocategoria, descrizione, stato } = req.body;
+
+    const [updated] = await Sottocategorie.update({
+      sottocategoria,
+      descrizione,
+      stato
+    }, {
       where: { id_categoria, id_sottocategoria }
     });
     if (!updated) {
