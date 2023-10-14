@@ -1,24 +1,3 @@
-// import { Router } from "express";
-// import {
-//     getProdottiFilter,
-//     getProdotti,
-//     getProdotto,
-//     insertProdotto,
-//     updateProdotto,
-//     deleteProdotto,
-// } from "../controllers/prodottiController.js";
-
-// const router = Router();
-
-// router.get("/", getProdotti);
-// router.post("/getProdottiFilter", getProdottiFilter);
-// router.get("/:id", getProdotto);
-// router.post("/", insertProdotto);
-// router.put("/:id", updateProdotto);
-// router.delete("/:id", deleteProdotto);
-
-// export default router;
-
 
 import express from 'express';
 import {
@@ -30,7 +9,25 @@ import {
   getProdottiFilter
 } from '../controllers/prodottiController.js';
 
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    console.log("-----------------------------");
+   
+    
+    cb(null, `${global.__rootdir}/uploads`)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
+
+const upload = multer({ storage: storage });
+
 const router = express.Router();
+
+router.post('/', insertProdotti);
 
 router.post('/prodotti-filter', getProdottiFilter);
 // Get all products
@@ -40,7 +37,6 @@ router.get('/', getProdotti);
 router.get('/:uuid_prodotto', getProdottoById);
 
 // Create a new product
-router.post('/', insertProdotti);
 
 // Update a product
 router.put('/:uuid_prodotto', updateProdotti);

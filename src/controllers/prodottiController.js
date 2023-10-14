@@ -1,7 +1,23 @@
 import Prodotto from '../models/Prodotti.js';
+import ProdottoImmagine from '../models/ProdottiImmagine.js';
 import Articolo from '../models/Articoli.js';
 import getUUID from '../helpers/generaUUID.js'
 
+import path from 'path';
+import fs from 'fs';
+
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {   
+    cb(null, `${global.__rootdir}/uploads/prodotti`)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
+
+const upload = multer({ storage: storage });
 export const getProdottiFilter = async (req, res) => {
   try {
     const { pageIndex, pageSize, sort, query } = req.body;
@@ -89,69 +105,115 @@ export const getProdottoById = async (req, res) => {
   }
 }
 
+
 // Create a new product
 export const insertProdotti = async (req, res) => {
+
   try {
-    const {
-      prodotto,
-      descrizione,
-      scheda,
-      tags,
-      codice,
-      sku,
-      id_categoria,
-      id_sottocategoria,
-      id_produttore,
-      id_aliquota,
-      stato
-    } = req.body;
 
-    let uuid_prodotto = getUUID();
-
-    const nuovoProdotto = await Prodotto.create({
-      uuid_prodotto,
-      prodotto,
-      descrizione,
-      scheda,
-      tags,
-      codice,
-      sku,
-      id_categoria,
-      id_sottocategoria,
-      id_produttore,
-      id_aliquota,
-      stato
-    });
-
-    if(nuovoProdotto){
-      let uuid_articolo = getUUID();
-      let id_prodotto = nuovoProdotto.id_prodotto;
-      let articolo = prodotto;
+    upload.any()(req, res, async function (err) {
       const {
-        prezzo_listino,
-        prezzo_offerta,
-        prezzo_minimo,
-        note
+        prodotto,
+        descrizione,
+        scheda,
+        tags,
+        codice,
+        sku,
+        id_categoria,
+        id_sottocategoria,
+        id_produttore,
+        id_aliquota,
+        stato
       } = req.body;
   
-      await Articolo.create({
-        uuid_articolo,
-        id_prodotto,
-        id_variante: 0,
-        id_attributo: 0,
-        articolo,
-        prezzo_listino,
-        prezzo_offerta,
-        prezzo_minimo,
-        note
+      let uuid_prodotto = getUUID();
+  
+      const nuovoProdotto = await Prodotto.create({
+        uuid_prodotto,
+        prodotto,
+        descrizione,
+        scheda,
+        tags,
+        codice,
+        sku,
+        id_categoria,
+        id_sottocategoria,
+        id_produttore,
+        id_aliquota,
+        stato
       });
-    }
+  
+      if(nuovoProdotto){
+        let uuid_articolo = getUUID();
+        let id_prodotto = nuovoProdotto.id_prodotto;
+        let articolo = prodotto;
+        const {
+          prezzo_listino,
+          prezzo_offerta,
+          prezzo_minimo,
+          note
+        } = req.body;
+  
+        // Inserimento immagini
+  
+          if (err instanceof multer.MulterError) {
+            return res.status(400).json({ message: err.message });
+          } else if (err) {
+            return res.status(500).json({ message: err.message });
+          }
+          req.files.forEach(async function (file) {
+            // Generate a unique file name for the uploaded file
+            let id_immagine = await ProdottoImmagine.max('id_immagine', { where: { id_prodotto } });
+            id_immagine = await id_immagine + 1;
+            
+            const fileExtension = path.extname(file.originalname);
+            const fileName = id_prodotto + '-' + id_immagine + fileExtension;
+            let uuid_immagine_prodotto = getUUID('I');
+    
+            // Move the uploaded file to its final location
+            const oldPath = file.path;
+            const newPath = `${global.__rootdir}/uploads/prodotti/${fileName}`;
+            fs.rename(oldPath, newPath, async function (err) {
+              if (err) {
+                return res.status(500).json({ message: err.message });
+              }
+    
+              let immagine = fileName;
+              let nome_originale = file.originalname;
+          
+              const nuovaImmagineProdotto = await ProdottoImmagine.create({
+                id_prodotto,
+                id_immagine,
+                immagine,
+                nome_originale,
+                uuid_immagine_prodotto,
+              });
+      
+            });
+          });
+        
+    
+        await Articolo.create({
+          uuid_articolo,
+          id_prodotto,
+          id_variante: 0,
+          id_attributo: 0,
+          articolo,
+          prezzo_listino,
+          prezzo_offerta,
+          prezzo_minimo,
+          note
+        });
+      }
+  
+      //res.status(201).json(nuovoProdotto);
+      res.json({ ok:true, message:"Prodotto inserito correttamente", prodotto:nuovoProdotto});
+    });
 
-    //res.status(201).json(nuovoProdotto);
-    res.json({ ok:true, message:"Prodotto inserito correttamente", prodotto:nuovoProdotto});
   } catch (error) {
     res.status(500).json({ error: 'Errore durante la creazione del prodotto', error });
   }
+  
 }
 
 // Update a product
